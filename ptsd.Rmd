@@ -8,20 +8,19 @@ editor_options:
     wrap: sentence
 ---
 
-```{r setup, include=FALSE}
+```{r}
 knitr::opts_chunk$set(echo = TRUE, collapse = FALSE, fig.height = 4, warning = F, message = F)
 if (!require("pacman")) install.packages("pacman"); library(pacman)
 pacman::p_load(ggplot2, tidyverse, boot, car, stringr, nlme, emmeans)
-install.packages("writexl")
-install.packages("(haven")
+
 ```
 
-```{r setup, include=FALSE}
-library(haven)
-library(writexl)
+```{r}
+#library(haven)
+#library(writexl)
 
-dat$a <- read_sav(file.choose())
-nrow(data)
+#dat$a <- read_sav(file.choose())
+#nrow(data)
 #device_guess
 ```
 
@@ -91,9 +90,9 @@ dat3 = dat3[order(dat3$ID, dat3$time),]
 To build a valid cross-lagged model, we must include the following three types of paths simultaneously.
 Even if we only care about one of them, the others must be in the model to ensure accurate results:
 
-```{r pressure, echo=FALSE}
+```{r}
 # 1. Install and load the required package
-install.packages("lavaan")
+
 library(lavaan)
 
 # 2. Write the SEM model syntax (lavaan syntax)
@@ -176,7 +175,7 @@ summary(fit, fit.measures = TRUE, standardized = TRUE)
 
 ```
 
-```{r pressure, echo=FALSE}
+```{r}
 # Extract all parameter estimates
 params <- parameterEstimates(fit, standardized = TRUE)
 
@@ -205,7 +204,7 @@ data includes a "randomization" column (where 0 represents the Sham group and 1 
 Instead of lumping everyone together, it calculates path coefficients separately for the "treatment group" and the "control group." This enables you to discover that, while pain may not predict PTSD in the control group, in the VSS treatment group—thanks to the effects of the device—the alleviation of pain significantly drives improvements in PTSD symptoms.
 Group 1 = randomization 0 = Sham （Control group） Group 2 = randomization 1 = VSS （treatment group）
 
-```{r pressure, echo=FALSE}
+```{r}
 library(lavaan)
 library(haven) # Ensure haven is loaded in case you need to use zap_labels()
 
@@ -267,7 +266,7 @@ print(results_final)
 
 The treatment not only alleviated individual symptoms but also altered the mechanisms underlying the vicious cycle among them.
 
-```{r pressure, echo=FALSE}
+```{r}
 #install.packages("dplyr")
 #install.packages("tidyr")
 
@@ -337,7 +336,7 @@ However, the VSS treatment group disrupted this vicious cycle (as evidenced by t
 The fact that one side is statistically significant while the other is not does not necessarily imply that there is a significant difference between the two sides.
 Use the Wald Test to make a final determination regarding these five paths.
 
-```{r pressure, echo=FALSE}
+```{r}
 library(lavaan)
 
 # 1. Add specific labels to the 5 paths that showed a flip (Format: c("sham_label", "vss_label"))
@@ -424,7 +423,7 @@ head(modindices(fit_wald, sort = TRUE), 10)
 
 
 
-```{r pressure, echo=FALSE}
+```{r}
 library(lavaan)
 
 # 1. Define the complete model syntax with all paths and new modifications
@@ -539,7 +538,7 @@ Clinical Significance: This reveals the stubborn, entrenching effect of sleep di
 
 ##Random-Intercept Cross-Lagged Panel Model (RI-CLPM)
 
-```{r pressure, echo=FALSE}
+```{r}
 library(lavaan)
 
 # 1. Define the Multigroup RI-CLPM syntax
@@ -621,7 +620,7 @@ Within-person variability has been "drained away": In the context of clinical sy
 Once the model extracts this "stable trait" component, the residual "natural weekly fluctuation (state)" variance that remains is extremely minimal.
 When the model attempts to identify cross-lagged predictive relationships within this scant residual variance, the software is unable to compute plausible standard errors; consequently, it throws errors and outputs "NA" values ​​alongside spurious coefficient estimates reaching into the hundreds.
 
-```{r pressure, echo=FALSE}
+```{r}
 library(dplyr)
 library(tidyr)
 
@@ -667,7 +666,7 @@ This is a known limitation of RI-CLPM when applied to complex multigroup longitu
 Therefore, we retained the traditional multigroup CLPM, which was optimally powered to capture the overall temporal dynamics and successfully converged.
 ## Parallel Latent Growth Curve Model (LGCM)
 
-```{r pressure, echo=FALSE}
+```{r}
 library(lavaan)
 
 # 1. Define the Parallel LGCM syntax
@@ -721,7 +720,7 @@ fit_lgcm <- sem(lgcm_syntax,
 summary(fit_lgcm, fit.measures = TRUE, standardized = TRUE)
 ```
 
-```{r pressure, echo=FALSE}
+```{r}
 library(dplyr)
 
 # Extract parameters
@@ -749,6 +748,8 @@ print(parallel_processes)
 # What to hope for: 'est' and 'std.all' are positive, and pvalue < 0.05. 
 # Meaning: For example, the faster the pain decreases (s_Pain), the faster PTSD decreases (s_PCL).
 ```
+
+
 
 1.  Encouraging Positive Results: PTSD and Sleep PTSD (s_PCL): Coefficient = -1.718 (p=0.015).
 

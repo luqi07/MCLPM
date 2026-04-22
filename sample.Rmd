@@ -1,0 +1,46 @@
+---
+title: "sample"
+output: html_document
+date: "2026-04-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+# read in data from SPSS
+# laptop
+library(haven)
+dat <- read_sav("C:/Users/SJ/Dropbox/Shengjia Tu/Projects/Peter Colvonen/Paper4/Data/Full Dataset 2-10-24 ITT analyses.sav")
+# desktop
+# dat <- read_sav("C:/Users/Shengjia/Dropbox/Shengjia Tu/Projects/Peter Colvonen/Paper4/Data/Full Dataset 2-10-24 ITT analyses.sav")
+```
+
+```{r}
+# PCL5_BL
+# which(names(dat) == "PCL5_BL") #35-38
+# pain
+# which(names(dat) == "Pain_bl") #53,61,69,77
+# ISI
+# which(names(dat) == "ISI_BL") #39-42
+dat2=dat[,c(1:3,10,35:42,53,61,69,77)]
+dat2$randomization=replace(dat2$randomization, dat2$randomization == 2, 0)
+dat2=as.data.frame(dat2)
+```
+
+```{r}
+# wide to long
+dat3=reshape(
+  dat2,
+  varying = list(PCL5=5:8,ISI=9:12,pain=13:16),
+  v.names = c("PCL5","ISI","pain"),
+  times = c(0,4,8,12),
+  timevar = "time",
+  idvar = "ID",
+  direction = "long"
+)
+dat3 = dat3[order(dat3$ID, dat3$time),] 
+```
